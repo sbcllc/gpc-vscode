@@ -28,7 +28,9 @@ apt-get install -y -qq \
 
 # Install code-server
 echo "Installing code-server..."
-CODE_SERVER_VERSION="${CODE_SERVER_VERSION:-}"
+
+# Try to get version from instance metadata, fallback to empty (latest)
+CODE_SERVER_VERSION=$(curl -s -f "http://metadata.google.internal/computeMetadata/v1/instance/attributes/code-server-version" -H "Metadata-Flavor: Google" 2>/dev/null || echo "")
 
 if [ -n "$CODE_SERVER_VERSION" ]; then
     echo "Installing code-server version: $CODE_SERVER_VERSION"
